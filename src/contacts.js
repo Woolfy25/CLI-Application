@@ -51,7 +51,29 @@ function removeContact(contactId) {
 }
 
 function addContact(name, email, phone) {
-  // ...codul tău
+  fs.readFile(contactsPath, "utf-8", (err, data) => {
+    if (err) {
+      console.error("Eroare la cititrea fisierului");
+      return;
+    }
+    const parsedObject = JSON.parse(data);
+    const newContact = {
+      id: nanoid(),
+      name: name,
+      email: email,
+      phone: phone,
+    };
+
+    parsedObject.push(newContact);
+    fs.writeFile(contactsPath, JSON.stringify(parsedObject), (err) => {
+      if (err) {
+        console.error("Eroare la scrierea fisierului");
+        return;
+      }
+      console.table(parsedObject);
+      console.log("Contact adaugat cu succes!");
+    });
+  });
 }
 
 module.exports = {
